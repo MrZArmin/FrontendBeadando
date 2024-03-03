@@ -7,6 +7,10 @@ body {
   min-height: 100vh;
 }
 
+tr {
+  border-bottom: 1px solid #d9d9d9;
+}
+
 .button {
   appearance: none;
   background-color: #2ea44f;

@@ -18,6 +18,7 @@
       selectionMode="single"
       dataKey="id"
       :metaKeySelection="false"
+      stripedRows
       @rowSelect="openBook"
     >
       <template #header>
@@ -30,7 +31,7 @@
               <InputText
                 v-model="searchTerm"
                 placeholder="Search term"
-                class="h-full"
+                class="h-fullmt-1 p-2 border rounded-lg w-40"
               />
             </div>
             <div class="relative">
@@ -52,6 +53,11 @@
       <Column field="author" header="Author"></Column>
       <Column field="isbn" header="ISBN"></Column>
       <Column field="price" header="Price"></Column>
+      <template #empty>
+        <div class="flex justify-center mt-4">
+          <p class="text-xl text-surface-900 dark:text-surface-0">No books found.</p>
+        </div>
+      </template>
     </DataTable>
   </div>
 </template>

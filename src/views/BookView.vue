@@ -71,6 +71,7 @@
           :label="id ? 'Modify book' : 'Add book'"
         />
         <Button
+          v-if="id"
           @click="deleteBook(form.id)"
           class="mt-4 p-2 bg-red-500 text-white rounded-lg"
           label="Delete"
@@ -113,7 +114,7 @@ const submitForm = () => {
       },
       body: JSON.stringify({
         ...form.value,
-        price: `$${form.value.price}`,
+        price: form.value.price.startsWith('$') ? form.value.price : `$${form.value.price}`,
       }),
     }).then(() => {
       router.push({ name: "home" });
@@ -145,12 +146,8 @@ const validate = () => {
     toast.error("Please fill in all the fields");
     return false;
   }
-  if (isNaN(Number(form.value.price))) {
-    toast.error("Price must be a number");
-    return false;
-  }
-  if (Number(form.value.price) < 0) {
-    toast.error("Price must be a positive number");
+  if (!validatePrice(form.value.price)) {
+    toast.error("Price must be in a format like $10.99 or 10.99");
     return false;
   }
   if (!validateISBN(form.value.isbn)) {
@@ -159,6 +156,11 @@ const validate = () => {
   }
 
   return true;
+};
+
+const validatePrice = (price: string) => {
+  let regex = new RegExp(/^\$?\d+(\.\d+)?$/);
+  return regex.test(price);
 };
 
 const validateISBN = (isbn: string) => {
