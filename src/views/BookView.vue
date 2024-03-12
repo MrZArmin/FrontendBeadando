@@ -64,6 +64,7 @@
           />
         </div>
       </div>
+      <ConfirmDialog/>
       <div class="flex flex-wrap justify-between align-center">
         <Button
           @click="submitForm"
@@ -72,7 +73,7 @@
         />
         <Button
           v-if="id"
-          @click="deleteBook(form.id)"
+          @click="confirmDelete(form.id)"
           class="mt-4 p-2 bg-red-500 text-white rounded-lg"
           label="Delete"
         />
@@ -86,10 +87,26 @@ import { useRouter } from "vue-router";
 import { ref, onMounted } from "vue";
 import type { Book } from "@/types";
 import Button from "primevue/button";
+import ConfirmDialog from "primevue/confirmdialog";
+import { useConfirm } from "primevue/useconfirm";;
 import { useToast } from "vue-toast-notification";
-import "vue-toast-notification/dist/theme-sugar.css";
 
 const toast = useToast();
+
+const confirm = useConfirm();
+
+const confirmDelete = (id: string) => {
+  confirm.require({
+    message: "Are you sure you want to delete this book?",
+    header: "Delete Confirmation",
+    icon: "pi pi-exclamation-triangle",
+    rejectClass: "p-button-text",
+    acceptClass: "p-button-danger",
+    accept: () => {
+      deleteBook(id);
+    },
+  });
+};
 
 const router = useRouter();
 const id = router.currentRoute.value.params.id;
@@ -174,6 +191,7 @@ const deleteBook = (id: string) => {
   fetch(`http://localhost:3000/books/${id}`, {
     method: "DELETE",
   }).then(() => {
+    toast.success("Book deleted successfully");
     router.push({ name: "home" });
   });
 };

@@ -7,14 +7,27 @@ import { RouterView } from "vue-router";
 import { faker } from "@faker-js/faker";
 import { ref, onMounted } from "vue";
 import type { Book } from "./types";
+import { useToast } from "vue-toast-notification";
+
+const toast = useToast();
 
 const books = ref<Book[]>([]);
 
 const fetchBooks = async () => {
-  // Fetch books from the JSON server
-  const response = await fetch("http://localhost:3000/books");
-  const data = await response.json();
-  books.value = data;
+  try {
+    // Fetch books from the JSON server
+    const response = await fetch("http://localhost:3000/books");
+    if (!response.ok) {
+      throw new Error("Failed to fetch books from the server");
+    }
+    const data = await response.json();
+    books.value = data;
+  } catch (error) {
+    // Notify the user about the error
+    toast.error("Failed to fetch books from the server");
+    toast.error("Are you sure the JSON server is running?");
+    return;
+  }
 };
 
 const postBooks = async () => {

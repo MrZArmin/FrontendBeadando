@@ -1,13 +1,6 @@
 {
   "books": [
     {
-      "id": "334e",
-      "title": "Let it Snow! Let it Snow! Let it Snow!",
-      "author": "Jay Bode",
-      "isbn": "978-0-934557-38-2",
-      "price": "$156"
-    },
-    {
       "id": "e0ec",
       "title": "(Put Another Nickel In) Music! Music! Music!",
       "author": "Carol Borer",
